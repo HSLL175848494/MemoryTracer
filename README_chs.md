@@ -1,62 +1,62 @@
-# Memory Tracer (HSLL::MemoryTracer)
+# 内存跟踪器 (HSLL::MemoryTracer)
 
-A lightweight C++ memory leak detection tool for tracking memory allocations and capturing stack traces to help identify memory leak issues.
+一个轻量级的 C++ 内存泄漏检测工具，用于跟踪内存分配并捕获堆栈轨迹，帮助识别内存泄漏问题
 
-## Features
+## 特点
 
-- Tracks all `new`/`delete` operations during tracing sessions
-- Captures detailed stack traces for each memory allocation
-- Groups leaks by call stack for easier analysis
-- Thread-safe implementation
-- Cross-platform support (Windows/Linux)
+- 跟踪会话期间的所有 `new`/`delete` 操作
+- 为每个内存分配捕获详细的堆栈轨迹
+- 按调用堆栈对泄漏进行分组，便于分析
+- 线程安全的实现
+- 跨平台支持（Windows/Linux）
 
-## Usage Instructions
+## 使用说明
 
-### Compilation Configuration (CMake Example)
+### 编译配置要点(以cmake为例)
 
-**Must** define `HS_ENABLE_TRACING` macro at compile time to enable tracing:
+**必须**在编译时定义 `HS_ENABLE_TRACING` 宏来启用追踪功能：
 
 ```cmake
-# CMake configuration example
+# CMake 配置示例
 target_compile_definitions(${PROGRAM_NAME} PRIVATE HS_ENABLE_TRACING)
 ```
 
-**Must** add `HS_Leak.h` include path to your project to ensure all compilation units use the overloaded memory operations:
+**必须**将 `HS_Leak.h` 包含路径添加到项目中，确保所有编译单元使用重载的内存操作函数：
 
 ```cmake
-target_include_directories(${PROJECT_NAME} PRIVATE [path_to_HS_Leak.h_directory])
+target_include_directories(${PROJECT_NAME} PRIVATE [HS_Leak.h所在目录])
 ```
 
-### Platform-Specific Linking Requirements
+### 平台特定的链接要求
 
-- **Windows**: Requires linking `dbghelp.lib`
-- **Linux**: Requires linking `-ldl` library, recommended to use `-rdynamic` compile flag
+- **Windows**: 需要链接 `dbghelp.lib`
+- **Linux**: 需要链接 `-ldl` 库，推荐使用 `-rdynamic` 编译标志
 
-## Code Examples
+## 代码示例
 
-### Basic Usage Pattern
+### 基本使用模式
 
 ```cpp
-// Start tracking memory allocations
+// 开始跟踪内存分配
 HSLL::Utils::MemoryTracer::StartTracing();
 
-// Execute code to be monitored
+// 执行需要检测的代码
 // ...
 
-// Stop tracking and get leak report
+// 停止跟踪并获取泄漏报告
 std::string report = HSLL::Utils::MemoryTracer::EndTracing();
 
-// Output memory leak report
+// 输出内存泄漏报告
 std::cout << report << std::endl;
 ```
 
-### Usage Notes
+### 使用说明
 
-- `StartTracing()` and `EndTracing()` can be called from any thread
-- When `EndTracing()` is called concurrently, only the first call will retrieve the report
-- The report only includes memory allocations between the two calls
+- `StartTracing()` 和 `EndTracing()` 可以在任意线程中调用
+- 并发调用 `EndTracing()` 时，只有第一次调用能获取报告
+- 报告仅包含两个调用之间的内存分配情况
 
-## Output Example
+## 输出示例
 
 ```
 ================================================================================

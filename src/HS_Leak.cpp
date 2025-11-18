@@ -459,9 +459,9 @@ namespace HSLL
 
 void* operator new(size_t uSize)
 {
-	void* pPtr = std::malloc(uSize);
+	void* pMem = std::malloc(uSize);
 
-	if (!pPtr)
+	if (!pMem)
 	{
 		throw std::bad_alloc();
 	}
@@ -469,10 +469,10 @@ void* operator new(size_t uSize)
 	if (HSLL::Utils::MemoryTracer::m_bTracingEnabled &&
 		HSLL::Utils::MemoryTracer::m_oInstance.IsTracingActive())
 	{
-		HSLL::Utils::MemoryTracer::m_oInstance.RecordAllocation(pPtr, uSize);
+		HSLL::Utils::MemoryTracer::m_oInstance.RecordAllocation(pMem, uSize);
 	}
 
-	return pPtr;
+	return pMem;
 }
 
 void operator delete(void* pMem) noexcept
